@@ -1,0 +1,53 @@
+{% extends "talleres/base.html" %}
+
+{% block title %}Talleres Comunitarios{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<h1 style="text-align: center; font-weight: bold; color: #007B5E;">¡Bienvenido al portal de Talleres Comunitarios de Villa Verde!</h1>
+<div class="mb-4">
+    <img src="{% static 'talleres/images/imagen.jpg' %}" class="img-fluid rounded shadow" alt="Villa Verde" style = "display: block; margin: 0 auto;">
+</div>
+
+<h2 class="text-center mb-4 fw-bold">Talleres Comunitarios Disponibles</h2>
+
+<div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+        <form method="get">
+            <label for="categoria" class="form-label">Filtrar por categoría:</label>
+            <select name="categoria" id="categoria" class="form-select" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {% for cat in categorias %}
+                    <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == categoria_actual %}selected{% endif %}>{{ cat.nombre }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+</div>
+
+{% if talleres %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for taller in talleres %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ taller.titulo }}</h5>
+                <p class="card-text">
+                    <strong>Fecha:</strong> {{ taller.fecha }}<br>
+                    <strong>Duración:</strong> {{ taller.duracion_horas }} horas<br>
+                    <strong>Profesor:</strong> {{ taller.profesor.nombre_completo }}<br>
+                    <strong>Lugar:</strong> {{ taller.lugar.nombre }}<br>
+                    <strong>Categoría:</strong> {{ taller.categoria.nombre }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning text-center mt-4" role="alert">
+    No hay talleres disponibles por ahora.
+</div>
+{% endif %}
+{% endblock %}
