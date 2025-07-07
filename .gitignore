@@ -1,0 +1,42 @@
+# Entorno virtual
+env/
+
+# Archivos Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Archivos de base de datos
+*.sqlite3
+
+# Archivos de configuración locales
+*.env
+*.log
+*.pot
+*.pydevproject
+*.sublime-project
+*.sublime-workspace
+
+# Directorios de caché
+.cache/
+.mypy_cache/
+.pytest_cache/
+
+# VS Code
+.vscode/
+
+# Archivos generados por compilación o deploy
+staticfiles/
+media/
+build/
+dist/
+
+# Archivos de dependencia
+pip-log.txt
+requirements.txt~
+
+# Archivos temporales de sistema
+.DS_Store
+Thumbs.db
