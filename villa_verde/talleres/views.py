@@ -7,6 +7,8 @@ from .models import Taller, Categoria
 from django.utils import timezone
 from .forms import CustomUserCreationForm
 from .forms import TallerPropuestoForm
+from .utils import verificar_feriado
+
 def home(request):
     categoria_id = request.GET.get('categoria')
     talleres = Taller.objects.filter(
@@ -33,21 +35,6 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'talleres/login.html', {'form': form})
 
-@login_required
-def proponer_taller_view(request):
-    if request.user.tipo != 'junta':
-        return redirect('home')  # o mostrar un error
-
-    if request.method == 'POST':
-        form = TallerPropuestoForm(request.POST)
-        if form.is_valid():
-            taller = form.save(commit=False)
-            taller.estado = 'pendiente'
-            taller.save()
-            return redirect('home')
-    else:
-        form = TallerPropuestoForm()
-    return render(request, 'talleres/proponer_taller.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -68,3 +55,35 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     return render(request, 'talleres/profile.html')
+
+@login_required
+def proponer_taller_view(request):
+    if not (request.user.tipo == 'junta' or request.user.tipo == 'admin'):
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = TallerPropuestoForm(request.POST)
+        if form.is_valid():
+            taller = form.save(commit=False)
+
+            info_feriado = verificar_feriado(taller.fecha)
+
+            if info_feriado['es_feriado']:
+                if info_feriado['irrenunciable']:
+                    taller.estado = 'rechazado'
+                    taller.observacion = "No se programan talleres en feriados irrenunciables"
+                elif taller.categoria.nombre != "Aire Libre":
+                    taller.estado = 'rechazado'
+                    taller.observacion = "Sólo se programan talleres al aire libre en feriados"
+                else:
+                    taller.estado = 'pendiente'
+            else:
+                taller.estado = 'pendiente'
+
+            taller.propuesto_por = request.user  # si usás este campo
+            taller.save()
+            return redirect('home')
+    else:
+        form = TallerPropuestoForm()
+
+    return render(request, 'talleres/proponer_taller.html', {'form': form})

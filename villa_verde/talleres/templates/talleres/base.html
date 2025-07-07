@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +16,14 @@
         .navbar-brand, .nav-link, .navbar-text {
             color: #fff !important;
         }
+        .navbar-brand img {
+            height: 36px;
+            width: 36px;
+            margin-right: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px #388e3c33;
+            object-fit: cover;
+        }
         footer {    
             margin-top: 40px;
             padding: 10px 0;
@@ -27,7 +36,10 @@
 <body>
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">Villa Verde</a>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
+            <img src="{% static 'talleres/images/logo.png' %}" alt="Logo Villa Verde">
+            Villa Verde
+        </a>
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
@@ -44,7 +56,6 @@
                             <a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a>
                         </li>
                     {% endif %}
-
             </ul>
         </div>
     </div>

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Usuario, Lugar, Categoria, Profesor, Taller
 from django.contrib.auth.admin import UserAdmin
+from .utils import verificar_feriado
 
 @admin.register(Usuario)
 class CustomUsuarioAdmin(UserAdmin):
@@ -47,3 +48,14 @@ class TallerAdmin(admin.ModelAdmin):
     def marcar_rechazado(self, request, queryset):
         updated = queryset.update(estado='rechazado')
         self.message_user(request, f"{updated} taller(es) marcados como rechazado.")
+
+    def save_model(self, request, obj, form, change):
+        info_feriado = verificar_feriado(obj.fecha)
+        if info_feriado['es_feriado']:
+            if info_feriado['irrenunciable']:
+                obj.estado = 'rechazado'
+                obj.observacion = "No se programan talleres en feriados irrenunciables"
+            elif obj.categoria.nombre != "Aire Libre":
+                obj.estado = 'rechazado'
+                obj.observacion = "Sólo se programan talleres al aire libre en feriados"
+        super().save_model(request, obj, form, change)
