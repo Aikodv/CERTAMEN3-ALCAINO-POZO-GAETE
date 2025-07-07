@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Taller, Categoria
 from django.utils import timezone
+from .forms import CustomUserCreationForm
 
 def home(request):
     categoria_id = request.GET.get('categoria')
@@ -31,15 +32,18 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'talleres/login.html', {'form': form})
+
+
+
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'talleres/register.html', {'form': form})
 
 @login_required
