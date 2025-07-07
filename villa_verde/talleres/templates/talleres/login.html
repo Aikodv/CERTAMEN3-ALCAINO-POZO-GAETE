@@ -10,10 +10,13 @@
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <div class="d-grid">
+                <div class="d-grid mb-2">
                     <button type="submit" class="btn btn-success">Entrar</button>
                 </div>
             </form>
+            <div class="d-grid">
+                <a href="{% url 'register' %}" class="btn btn-outline-primary">Registrarse</a>
+            </div>
         </div>
     </div>
 </div>
