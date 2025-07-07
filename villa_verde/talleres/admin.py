@@ -30,7 +30,18 @@ class ProfesorAdmin(admin.ModelAdmin):
 
 @admin.register(Taller)
 class TallerAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'fecha', 'duracion_horas', 'estado', 'profesor', 'lugar', 'categoria')
+    list_display = ('titulo', 'fecha', 'estado', 'profesor', 'lugar', 'categoria')
     list_filter = ('estado', 'fecha', 'categoria')
     search_fields = ('titulo', 'profesor__nombre_completo')
     ordering = ('fecha',)
+    actions = ['marcar_aceptado', 'marcar_rechazado']
+
+    @admin.action(description='Marcar como Aceptado')
+    def marcar_aceptado(self, request, queryset):
+        updated = queryset.update(estado='aceptado')
+        self.message_user(request, f"{updated} taller(es) marcados como aceptado.")
+
+    @admin.action(description='Marcar como Rechazado')
+    def marcar_rechazado(self, request, queryset):
+        updated = queryset.update(estado='rechazado')
+        self.message_user(request, f"{updated} taller(es) marcados como rechazado.")

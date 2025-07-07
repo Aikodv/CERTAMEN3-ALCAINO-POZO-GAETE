@@ -41,8 +41,8 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'talleres/register.html', {'form': form})
-@login_required
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('home')
