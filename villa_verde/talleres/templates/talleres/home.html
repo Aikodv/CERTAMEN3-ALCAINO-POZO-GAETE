@@ -5,17 +5,82 @@
 {% block content %}
 
 {% load static %}
-<h1 style="text-align: center; font-weight: bold; color: #007B5E;">¡Bienvenido al portal de Talleres Comunitarios de Villa Verde!</h1>
+<style>
+    body {
+        background: linear-gradient(135deg, #e0f7fa 0%, #c8e6c9 100%);
+    }
+    .custom-header {
+        text-align: center;
+        font-weight: bold;
+        color: #007B5E;
+        letter-spacing: 1px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 8px #b2dfdb;
+    }
+    .custom-img {
+        display: block;
+        margin: 0 auto 30px auto;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        max-width: 90%;
+        max-height: 350px;
+        object-fit: cover;
+    }
+    .custom-section-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        color: #388e3c;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 6px #c8e6c9;
+    }
+    .custom-card {
+        border: none;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .custom-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .custom-card-title {
+        color: #007B5E;
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+    .custom-card-text strong {
+        color: #388e3c;
+    }
+    .custom-form {
+        background: #f1f8e9;
+        border-radius: 12px;
+        padding: 18px 24px;
+        box-shadow: 0 2px 8px rgba(56,142,60,0.08);
+    }
+    .alert-warning {
+        background: #fffde7;
+        color: #ff9800;
+        border-radius: 10px;
+        border: none;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(255,193,7,0.08);
+    }
+</style>
+
+<h1 class="custom-header">¡Bienvenido al portal de Talleres Comunitarios de Villa Verde!</h1>
 <div class="mb-4">
-    <img src="{% static 'talleres/images/imagen.jpg' %}" class="img-fluid rounded shadow" alt="Villa Verde" style = "display: block; margin: 0 auto;">
+    <img src="{% static 'talleres/images/imagen.jpg' %}" class="custom-img" alt="Villa Verde">
 </div>
 
-<h2 class="text-center mb-4 fw-bold">Talleres Comunitarios Disponibles</h2>
+<h2 class="custom-section-title">Talleres Comunitarios Disponibles</h2>
 
 <div class="row justify-content-center mb-4">
     <div class="col-md-6">
-        <form method="get">
-            <label for="categoria" class="form-label">Filtrar por categoría:</label>
+        <form method="get" class="custom-form shadow-sm">
+            <label for="categoria" class="form-label fw-bold" style="color:#388e3c;">Filtrar por categoría:</label>
             <select name="categoria" id="categoria" class="form-select" onchange="this.form.submit()">
                 <option value="">Todas</option>
                 {% for cat in categorias %}
@@ -30,10 +95,10 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for taller in talleres %}
     <div class="col">
-        <div class="card h-100 shadow-sm">
+        <div class="card custom-card h-100 shadow-sm">
             <div class="card-body">
-                <h5 class="card-title fw-bold">{{ taller.titulo }}</h5>
-                <p class="card-text">
+                <h5 class="card-title custom-card-title">{{ taller.titulo }}</h5>
+                <p class="card-text custom-card-text">
                     <strong>Fecha:</strong> {{ taller.fecha }}<br>
                     <strong>Duración:</strong> {{ taller.duracion_horas }} horas<br>
                     <strong>Profesor:</strong> {{ taller.profesor.nombre_completo }}<br>
