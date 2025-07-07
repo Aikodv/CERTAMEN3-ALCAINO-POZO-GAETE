@@ -1,0 +1,20 @@
+{# templates/talleres/proponer_taller.html #}
+
+{% extends "talleres/base.html" %}
+
+{% block title %}Proponer Taller{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Proponer Nuevo Taller</h2>
+    <div class="card shadow p-4 col-md-6 offset-md-3">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Enviar Taller</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

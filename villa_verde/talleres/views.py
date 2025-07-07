@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Taller, Categoria
 from django.utils import timezone
 from .forms import CustomUserCreationForm
-
+from .forms import TallerPropuestoForm
 def home(request):
     categoria_id = request.GET.get('categoria')
     talleres = Taller.objects.filter(
@@ -33,7 +33,21 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'talleres/login.html', {'form': form})
 
+@login_required
+def proponer_taller_view(request):
+    if request.user.tipo != 'junta':
+        return redirect('home')  # o mostrar un error
 
+    if request.method == 'POST':
+        form = TallerPropuestoForm(request.POST)
+        if form.is_valid():
+            taller = form.save(commit=False)
+            taller.estado = 'pendiente'
+            taller.save()
+            return redirect('home')
+    else:
+        form = TallerPropuestoForm()
+    return render(request, 'talleres/proponer_taller.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
